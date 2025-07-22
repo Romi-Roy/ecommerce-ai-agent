@@ -1,0 +1,9 @@
+date,item_id,ad_sales,impressions,ad_spend,clicks,units_sold,total_sales,total_units_ordered,eligibility,message
+2025-06-01,29,32.96,1963,16.87,83,,309.99,1,FALSE,"This product's cost to Amazon does not allow us to meet customers' pricing expectations."
+2025-06-01,1,176420.39,,,110,,,,TRUE,
+2025-06-01,29,95.99,1690,0.48,1,,,,FALSE,"This product's cost to Amazon does not allow us to meet customers' pricing expectations."
+2025-06-01,31,0,0,1.93,694,375.69,319,382,TRUE,
+2025-06-01,41,096.98,59046401,392.85,5,,617.99,3,TRUE,
+2025-06-01,50,1475.82,,,40,,,,TRUE,
+2025-06-01,6,236.99,408,1.31,2,,,,TRUE,
+2025-06-01,7,0,1764,17.72,120,,674.89,7,TRUE,

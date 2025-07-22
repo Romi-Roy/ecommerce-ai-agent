@@ -51,7 +51,7 @@ export function executeQuery<T = any>(sql: string, params?: unknown): T[] {
     const stmt = db.prepare(sql);
     return stmt.all(params ?? {}) as T[];
   } catch (err) {
-    console.error('❌ DB query error:', err);
+    console.error('DB query error:', err);
     throw err;
   }
 }
