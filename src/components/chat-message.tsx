@@ -2,6 +2,7 @@
 
 import type { Message } from "@/types/chat" 
 import { DataTable } from "@/components/data-table"
+import RoasGauge from "@/components/charts/RoasGauge"  
 import { format } from "date-fns"
 import { Database, AlertCircle } from "lucide-react"
 
@@ -44,10 +45,17 @@ export function ChatMessage({ message }: ChatMessageProps) {
           </div>
         )}
 
-        {/* Data Results Table */}
         {!isUser && message.results && message.results.length > 0 && (
-          <div className="mt-3 bg-[#111827] rounded-xl p-4 shadow-lg border border-[#2A2A2A]">
-            <DataTable data={message.results} />
+          <div className="mt-3">
+            {message.results.length === 1 && Object.keys(message.results[0]).length === 1 ? (
+              <div className="flex justify-center">
+                <RoasGauge value={Number(Object.values(message.results[0])[0])} />
+              </div>
+            ) : (
+              <div className="bg-[#111827] rounded-xl p-4 shadow-lg border border-[#2A2A2A]">
+                <DataTable data={message.results} />
+              </div>
+            )}
           </div>
         )}
 
