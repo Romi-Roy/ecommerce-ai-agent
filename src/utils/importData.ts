@@ -2,97 +2,74 @@ import fs from 'fs';
 import path from 'path';
 import { parse } from 'csv-parse/sync';
 import db from '../lib/database';
+import {
+  EligibilityRow, AdSalesRow, TotalSalesRow
+} from '../types/data-row-models';
 
-/**
- * A record representing one CSV row.
- * Add or adjust fields as per your actual CSV headers.
- */
-interface SampleRecord {
-  date: string;
-  item_id: string;
-  eligibility?: string;
-  message?: string;
-  ad_sales?: string;
-  impressions?: string;
-  ad_spend?: string;
-  clicks?: string;
-  units_sold?: string;
-  total_sales?: string;
-  total_units_ordered?: string;
+function loadCsv<T>(fileName: string): T[] {
+  const csvPath = path.join(process.cwd(), 'src/data', fileName);
+  const csv = fs.readFileSync(csvPath, 'utf8');
+  return parse(csv, { columns: true, skip_empty_lines: true }) as T[];
 }
 
-export function importSampleData(): void {
-  try {
-    const csvPath = path.join(process.cwd(), 'src/data/sample_data.csv');
-    const csvContent = fs.readFileSync(csvPath, 'utf-8');
-    const records = parse(csvContent, {
-      columns: true,
-      skip_empty_lines: true
-    }) as SampleRecord[];
+export function importData(): void {
+  const eligRows  = loadCsv<EligibilityRow>('product_eligibility.csv');
+  const adRows    = loadCsv<AdSalesRow>('ad_sales_metrics.csv');
+  const totalRows = loadCsv<TotalSalesRow>('total_sales_metrics.csv');
 
-    console.log(`Importing ${records.length} records...`);
+  console.log(
+    `Importing: elig ${eligRows.length}, ads ${adRows.length}, totals ${totalRows.length}`
+  );
 
-    const insertEligibility = db.prepare(`
-      INSERT INTO product_eligibility
-        (eligibility_datetime_utc, item_id, eligibility, message)
-      VALUES (?, ?, ?, ?)`);
-      
-    const insertAdSales = db.prepare(`
-      INSERT INTO ad_sales_metrics
-        (date, item_id, ad_sales, impressions, ad_spend, clicks, units_sold)
-      VALUES (?, ?, ?, ?, ?, ?, ?)`);
-    const insertTotalSales = db.prepare(`
-      INSERT INTO total_sales_metrics
-        (date, item_id, total_sales, total_units_ordered)
-      VALUES (?, ?, ?, ?)`);
+  const stmtElig = db.prepare(`
+    INSERT INTO product_eligibility
+      (eligibility_datetime_utc, item_id, eligibility, message)
+    VALUES (?, ?, ?, ?)`);
 
-    const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  const stmtAds = db.prepare(`
+    INSERT INTO ad_sales_metrics
+      (date, item_id, ad_sales, impressions, ad_spend, clicks, units_sold)
+    VALUES (?, ?, ?, ?, ?, ?, ?)`);
 
-    const insertMany = db.transaction((recs: SampleRecord[]) => {
-      for (const r of recs) {
-        const itemId = parseInt(r.item_id, 10);
+  const stmtTotal = db.prepare(`
+    INSERT INTO total_sales_metrics
+      (date, item_id, total_sales, total_units_ordered)
+    VALUES (?, ?, ?, ?)`);
 
-        // Eligibility
-        if (r.eligibility !== undefined) {
-            const eligibilityValue = r.eligibility === 'TRUE' ? 1 : 0;
-            insertEligibility.run(
-                now,
-                itemId,
-                eligibilityValue,
-                r.message ?? null
-            );
-        }
+  db.transaction(() => {
+    // 3.1 Eligibility
+    for (const r of eligRows) {
+      stmtElig.run(
+        r.eligibility_datetime_utc,
+        parseInt(r.item_id, 10),
+        r.eligibility === 'TRUE' ? 1 : 0,
+        r.message ?? null
+      );
+    }
 
-        // Ad sales metrics
-        if (r.ad_sales || r.impressions || r.ad_spend) {
-          insertAdSales.run(
-            r.date,
-            itemId,
-            parseFloat(r.ad_sales ?? '0'),
-            parseInt(r.impressions ?? '0', 10),
-            parseFloat(r.ad_spend ?? '0'),
-            parseInt(r.clicks ?? '0', 10),
-            parseInt(r.units_sold ?? '0', 10)
-          );
-        }
+    // 3.2 Ad sales
+    for (const r of adRows) {
+      stmtAds.run(
+        r.date,
+        parseInt(r.item_id, 10),
+        parseFloat(r.ad_sales),
+        parseInt(r.impressions, 10),
+        parseFloat(r.ad_spend),
+        parseInt(r.clicks, 10),
+        parseInt(r.units_sold, 10)
+      );
+    }
 
-        // Total sales metrics
-        if (r.total_sales || r.total_units_ordered) {
-          insertTotalSales.run(
-            r.date,
-            itemId,
-            parseFloat(r.total_sales ?? '0'),
-            parseInt(r.total_units_ordered ?? '0', 10)
-          );
-        }
-      }
-    });
+    // 3.3 Total sales
+    for (const r of totalRows) {
+      stmtTotal.run(
+        r.date,
+        parseInt(r.item_id, 10),
+        parseFloat(r.total_sales),
+        parseInt(r.total_units_ordered, 10)
+      );
+    }
+  })();
 
-    insertMany(records);
-
-    console.log('Sample data imported successfully!');
-  } catch (err) {
-    console.error('Error importing data:', err);
-    throw err;
-  }
+  console.log('CSV import complete.');
 }

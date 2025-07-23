@@ -3,7 +3,7 @@ import ChatInterface from '@/components/chatInterface';
 
 export default function Home() {
    return (
-    <main className="min-h-screen bg-gray-50 py-8">
+    <main className="min-h-screen bg-[#0E0E10]">
       <ChatInterface />
     </main>
   );
