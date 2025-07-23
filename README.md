@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🤖 AI E-commerce Data Agent
 
-## Getting Started
+> Transform your e-commerce data analysis with natural language AI
 
-First, run the development server:
+A modern, full-stack web application that enables businesses to query their e-commerce data using natural language. Built with Next.js, TypeScript, and Google Gemini AI.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 🧠 **AI-Powered Queries**: Ask questions in plain English, get SQL results instantly
+- 📊 **Smart Visualizations**: Automatic chart selection based on data types
+- ⚡ **Real-time Streaming**: Live typing effects and progressive data loading
+- 🎨 **Modern UI**: Dark-themed interface with shadcn/ui components
+- 📱 **Responsive Design**: Optimized for desktop, tablet, and mobile
+- 🔒 **Type-Safe**: Full TypeScript implementation with robust error handling
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Live Demo
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Try these example queries:
+- "What is my total sales?"
+- "Calculate the RoAS" 
+- "Which product had the highest CPC?"
 
-## Learn More
+## 🛠️ Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **UI**: React + Tailwind CSS + shadcn/ui
+- **AI**: Google Gemini 1.5 Flash
+- **Database**: SQLite with better-sqlite3
+- **Charts**: Recharts with custom components
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📊 Data Sources
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The agent analyzes three key datasets:
+- **Product Eligibility**: Advertising eligibility and status tracking
+- **Ad Sales Metrics**: Campaign performance, spend, and conversion data  
+- **Total Sales Metrics**: Overall revenue and unit sales tracking
 
-## Deploy on Vercel
+## 🎯 Key Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### AI-Powered Natural Language Processing
+- Converts business questions to SQL automatically
+- Understands e-commerce terminology and metrics
+- Handles complex multi-table queries
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Intelligent Visualizations
+- **Radial Gauges**: For performance metrics (RoAS, conversion rates)
+- **Number Cards**: For currency values and counts
+- **Data Tables**: For detailed breakdowns
+- **Bar Charts**: For comparative analysis
+
+### Modern User Experience
+- Real-time streaming responses
+- Chat-based interface with query history
+- Suggested questions for quick exploration
+- Mobile-responsive design
+
+## 🔧 Architecture
+
+Built on a modern, scalable architecture:
+- **Frontend**: React components with TypeScript
+- **API Layer**: Next.js API routes for AI communication
+- **AI Service**: Google Gemini for text-to-SQL conversion
+- **Database**: SQLite for local data storage
+- **Visualization**: Recharts with custom metric detection
