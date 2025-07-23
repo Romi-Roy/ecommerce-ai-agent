@@ -5,6 +5,7 @@ import { DataTable } from "@/components/data-table"
 import RoasGauge from "@/components/charts/RoasGauge"  
 import { format } from "date-fns"
 import { Database, AlertCircle } from "lucide-react"
+import MetricVisualization from "./charts/MetricVisualization"
 
 interface ChatMessageProps {
   message: Message
@@ -49,7 +50,10 @@ export function ChatMessage({ message }: ChatMessageProps) {
           <div className="mt-3">
             {message.results.length === 1 && Object.keys(message.results[0]).length === 1 ? (
               <div className="flex justify-center">
-                <RoasGauge value={Number(Object.values(message.results[0])[0])} />
+                <MetricVisualization 
+                  columnName={Object.keys(message.results[0])[0]}
+                  value={Number(Object.values(message.results[0])[0])} 
+                />
               </div>
             ) : (
               <div className="bg-[#111827] rounded-xl p-4 shadow-lg border border-[#2A2A2A]">
