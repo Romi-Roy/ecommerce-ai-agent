@@ -22,7 +22,7 @@ Try these example queries:
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 14 with App Router
+- **Framework**: Next.js 15 with App Router
 - **Language**: TypeScript
 - **UI**: React + Tailwind CSS + shadcn/ui
 - **AI**: Google Gemini 1.5 Flash
